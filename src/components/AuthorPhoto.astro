@@ -1,0 +1,28 @@
+---
+/** Round author photo, or a striped circle until a photo is added. Size comes from the class passed in. */
+import type { Author } from '../lib/types';
+
+interface Props {
+  author: Author;
+  class?: string;
+}
+
+const { author, class: className } = Astro.props;
+---
+
+{
+  author.photo ? (
+    <img
+      src={author.photo.src}
+      alt={author.photo.alt || author.name}
+      class:list={['shrink-0 rounded-full object-cover', className]}
+    />
+  ) : (
+    <div
+      aria-hidden="true"
+      class:list={['grid shrink-0 place-items-center rounded-full text-[11px] font-bold tracking-[0.08em] uppercase hatch-blue', className]}
+    >
+      Photo
+    </div>
+  )
+}

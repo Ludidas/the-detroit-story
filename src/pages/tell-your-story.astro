@@ -1,25 +1,119 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
 
-// Basic version for now; the submission form is built in step 6.
-const ways = [
-  'Tell us about yourself',
-  'Suggest someone we should interview',
-  'Suggest a story or topic',
-  'Leave your contact information so we can follow up',
+/*
+  The form is complete on the page, but nothing is sent yet: step 6 adds the
+  server endpoint that emails submissions, plus spam protection. Until then,
+  submitting shows a note saying the form isn't connected.
+
+  Links can preselect the choice with ?type=me, ?type=someone or ?type=idea
+  (the Voices page's "Suggest someone to interview" button uses ?type=someone).
+*/
+const choices = [
+  { value: 'me', label: 'My story' },
+  { value: 'someone', label: 'Someone to interview' },
+  { value: 'idea', label: 'A story idea' },
 ];
+
+const field =
+  'w-full rounded-xl border-[1.5px] border-muted bg-white px-3.5 text-base text-ink placeholder:text-muted/70';
+const label = 'text-[15px] leading-5 font-semibold';
 ---
 
-<BaseLayout title="Tell Your Story">
-  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
-    <SectionHeading level="h1" title="Tell Your Story" />
-    <div class="max-w-[720px] text-lg leading-8">
-      <p>Here’s how you can share your story or point us to someone else’s:</p>
-      <ul class="mt-4 list-disc space-y-1 pl-6">
-        {ways.map((way) => <li>{way}</li>)}
-      </ul>
-      <p class="mt-8 rounded-card border-2 border-dashed border-muted p-6 text-muted">[Submission form goes here.]</p>
+<BaseLayout
+  title="Tell Your Story"
+  description="Share your story, suggest someone we should interview, or pitch a story or topic."
+>
+  <section class="mx-auto max-w-site px-5 pt-10 pb-16 sm:px-8 lg:pt-14 lg:pb-24">
+    <div class="flex flex-wrap items-start gap-x-16 gap-y-10">
+      <div class="min-w-0 flex-[1_1_360px]">
+        <h1
+          class="border-t-[3px] border-ink pt-4 font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] font-extrabold tracking-[-0.02em]"
+        >
+          Tell Your Story
+        </h1>
+        <p class="mt-4 max-w-[480px] text-lg leading-8">
+          Tell us about yourself, suggest someone we should interview, or pitch a story or topic. Leave your contact
+          information so we can follow up.
+        </p>
+        <p class="mt-6 max-w-[480px] text-base leading-7 text-muted">
+          [What happens after someone sends this in: who reads it, and how soon they might hear back.]
+        </p>
+      </div>
+
+      <form
+        data-tell-form
+        method="post"
+        class="flex min-w-0 flex-[1_1_440px] flex-col gap-5 rounded-[20px] border-2 border-ink bg-white p-5 shadow-[8px_8px_0_var(--color-sun)] sm:p-8"
+      >
+        <fieldset class="min-w-0">
+          <legend class={label}>What would you like to share?</legend>
+          <div class="mt-2.5 flex flex-wrap gap-2">
+            {
+              choices.map((choice, i) => (
+                <label class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-[1.5px] border-ink px-4 text-[15px] font-medium transition-colors has-checked:bg-ink has-checked:text-white">
+                  <input
+                    type="radio"
+                    name="type"
+                    value={choice.value}
+                    required={i === 0}
+                    class="size-[18px] accent-sun"
+                  />
+                  <span>{choice.label}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="flex flex-col gap-1.5">
+          <label for="tell-message" class={label}>Tell us more</label>
+          <textarea id="tell-message" name="message" rows="6" required class:list={[field, 'resize-y py-3 leading-6']}
+          ></textarea>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1.5">
+            <label for="tell-name" class={label}>Your name</label>
+            <input id="tell-name" name="name" type="text" autocomplete="name" required class:list={[field, 'h-12']} />
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="tell-contact" class={label}>Email or phone</label>
+            <input id="tell-contact" name="contact" type="text" required class:list={[field, 'h-12']} />
+          </div>
+        </div>
+
+        <p class="text-sm leading-6 text-muted">
+          [Privacy note: how people’s contact information will be used.]
+        </p>
+
+        <button
+          type="submit"
+          class="h-[52px] cursor-pointer rounded-full bg-ink text-base font-bold text-white transition-colors hover:bg-brand"
+        >
+          Send it in
+        </button>
+
+        <p data-form-status role="status" class="text-[15px] leading-6 font-semibold empty:hidden"></p>
+      </form>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-tell-form]');
+
+  if (form) {
+    // Preselect the choice from the link, e.g. /tell-your-story?type=someone
+    const type = new URLSearchParams(location.search).get('type');
+    const choice = [...form.querySelectorAll<HTMLInputElement>('input[name="type"]')].find((r) => r.value === type);
+    if (choice) choice.checked = true;
+
+    // Until step 6 connects sending, say so instead of pretending it worked.
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (status) status.textContent = 'This form isn’t connected yet, so nothing was sent.';
+    });
+  }
+</script>

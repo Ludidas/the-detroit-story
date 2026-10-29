@@ -28,6 +28,11 @@
     outline: 3px solid var(--color-ink);
     outline-offset: 3px;
   }
+
+  /* Keep the page from scrolling behind an open pop-up. */
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
 }
 
 /*

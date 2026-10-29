@@ -1,19 +1,50 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import StoryBody from '../components/StoryBody.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import TellYourStoryBand from '../components/TellYourStoryBand.astro';
+import { getAboutPage, getAuthors } from '../lib/content';
+import { site } from '../lib/site';
 
-// Basic version for now; in step 5 the About text is edited in Sanity.
+// In step 5 the About text and the people listed here are edited in Sanity.
+const about = await getAboutPage();
+const authors = await getAuthors();
 ---
 
-<BaseLayout title="About">
-  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+<BaseLayout title="About" description={about.lead}>
+  <section class="mx-auto max-w-site px-5 pt-10 pb-14 sm:px-8 lg:pt-14 lg:pb-20">
     <SectionHeading level="h1" title="About" />
-    <div class="max-w-[720px] space-y-5 text-lg leading-8">
-      <p class="font-display text-[clamp(1.25rem,2.1vw,1.625rem)] leading-[1.35] font-semibold">
-        The Detroit Story is a community storytelling project focused on the people, experiences, and issues that make
-        Detroit what it is.
-      </p>
-      <p>[A few paragraphs on what The Detroit Story is and why it exists.]</p>
+
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16">
+      <div class="max-w-[720px]">
+        <p
+          class="font-display text-[clamp(1.375rem,2.4vw,2rem)] leading-[1.3] font-semibold tracking-[-0.01em] text-balance"
+        >
+          {about.lead}
+        </p>
+        <StoryBody blocks={about.body} class="mt-8" />
+      </div>
+
+      <aside aria-labelledby="team-heading" class="self-start rounded-feature bg-sun p-6 sm:p-8">
+        <h2 id="team-heading" class="font-display text-[26px] leading-8 font-extrabold">Who’s behind it</h2>
+        <div class="mt-5 space-y-4">
+          {authors.map((author) => <AuthorCard author={author} />)}
+        </div>
+
+        <h2 class="mt-8 font-display text-[26px] leading-8 font-extrabold">Follow along</h2>
+        <p class="mt-2 text-base leading-7">The street interviews go up on Instagram.</p>
+        <a
+          href={site.instagramUrl}
+          target="_blank"
+          rel="noopener"
+          class="mt-4 inline-flex h-12 items-center rounded-full bg-ink px-6 font-semibold text-white transition-colors hover:bg-brand"
+        >
+          Instagram {site.instagramHandle}
+        </a>
+      </aside>
     </div>
   </section>
+
+  <TellYourStoryBand />
 </BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import { mainNav, tellYourStory } from '../lib/navigation';
+import { site } from '../lib/site';
 
 const links = [...mainNav, tellYourStory];
 const year = new Date().getFullYear();
@@ -25,7 +26,12 @@ const year = new Date().getFullYear();
       class="mt-4 flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-rule-ink pt-4 text-sm leading-5 text-muted-ink"
     >
       <p>© {year} The Detroit Story · Detroit, Michigan</p>
-      <p>Follow along: [YOUR SOCIAL LINKS]</p>
+      <p>
+        Follow along on{' '}
+        <a href={site.instagramUrl} target="_blank" rel="noopener" class="text-white underline underline-offset-4 hover:text-sun focus-visible:outline-sun">
+          Instagram
+        </a>
+      </p>
     </div>
   </div>
 </footer>

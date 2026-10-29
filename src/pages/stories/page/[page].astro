@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StoryListing from '../../../components/StoryListing.astro';
+import { getStoryPage } from '../../../lib/content';
+
+// Stories list pages 2, 3, ... at /stories/page/N. Page 1 lives at /stories.
+// (They can't sit at /stories/N because that address belongs to story pages.)
+export const getStaticPaths = (async () => {
+  const { totalPages } = await getStoryPage(1);
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}) satisfies GetStaticPaths;
+
+const { stories, page, totalPages } = await getStoryPage(Number(Astro.params.page));
+---
+
+<BaseLayout title={`Stories, page ${page}`}>
+  <StoryListing stories={stories} page={page} totalPages={totalPages} />
+</BaseLayout>

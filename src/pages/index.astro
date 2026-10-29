@@ -4,6 +4,7 @@ import FeaturedStory from '../components/FeaturedStory.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StoryCard from '../components/StoryCard.astro';
 import VoiceCard from '../components/VoiceCard.astro';
+import VoicePlayer from '../components/VoicePlayer.astro';
 import TellYourStoryBand from '../components/TellYourStoryBand.astro';
 import { getFeaturedStory, getLatestStories, getVoices } from '../lib/content';
 
@@ -47,4 +48,6 @@ const tones = ['blue', 'sun', 'gray'] as const;
   </section>
 
   <TellYourStoryBand />
+
+  <VoicePlayer />
 </BaseLayout>

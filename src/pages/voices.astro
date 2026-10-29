@@ -2,19 +2,84 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import VoiceCard from '../components/VoiceCard.astro';
+import VoicePlayer from '../components/VoicePlayer.astro';
 import { getVoices } from '../lib/content';
+import { site } from '../lib/site';
 
-// Basic version for now; in step 7 this fills from the tagged Instagram posts.
+// In step 7 this fills automatically from his tagged Instagram posts.
 const voices = await getVoices();
+const PER_BATCH = 12;
 ---
 
 <BaseLayout title="Voices of Detroit" description="Street interviews from around Detroit.">
   <section class="bg-sun">
-    <div class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+    <div class="mx-auto max-w-site px-5 pt-10 pb-14 sm:px-8 lg:pt-14 lg:pb-20">
       <SectionHeading level="h1" title="Voices of Detroit" subtitle="Street interviews from around the city." />
-      <div class="grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-4 lg:gap-6">
-        {voices.map((voice) => <VoiceCard voice={voice} />)}
+
+      <div class="mb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+        <p class="max-w-[640px] text-lg leading-7">
+          [A sentence or two about the series: who he talks to, what he asks, and how often new interviews go up.]
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href={site.instagramUrl}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex h-12 items-center rounded-full bg-ink px-6 font-semibold text-white transition-colors hover:bg-brand"
+          >
+            Follow on Instagram
+          </a>
+          <a
+            href="/tell-your-story?type=someone"
+            class="inline-flex h-12 items-center rounded-full border-2 border-ink px-6 font-semibold transition-colors hover:bg-ink hover:text-white"
+          >
+            Suggest someone to interview
+          </a>
+        </div>
       </div>
+
+      <ul data-voice-list class="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
+        {
+          voices.map((voice, i) => (
+            <li hidden={i >= PER_BATCH}>
+              <VoiceCard voice={voice} />
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        voices.length > PER_BATCH && (
+          <div class="mt-12 text-center">
+            <button
+              type="button"
+              data-load-more
+              data-batch={PER_BATCH}
+              class="inline-flex h-12 cursor-pointer items-center rounded-full bg-ink px-7 font-semibold text-white transition-colors hover:bg-brand"
+            >
+              Load more interviews
+            </button>
+          </div>
+        )
+      }
     </div>
   </section>
+
+  <VoicePlayer />
 </BaseLayout>
+
+<script>
+  // "Load more" shows the next batch of interviews that are already on the page.
+  const button = document.querySelector<HTMLButtonElement>('[data-load-more]');
+  const list = document.querySelector<HTMLUListElement>('[data-voice-list]');
+
+  button?.addEventListener('click', () => {
+    if (!list) return;
+    const batch = Number(button.dataset.batch) || 12;
+    const next = [...list.querySelectorAll<HTMLLIElement>('li[hidden]')].slice(0, batch);
+    next.forEach((item) => (item.hidden = false));
+    // Move keyboard focus to the first newly shown interview.
+    next[0]?.querySelector('a')?.focus();
+    if (!list.querySelector('li[hidden]')) button.parentElement?.remove();
+  });
+</script>

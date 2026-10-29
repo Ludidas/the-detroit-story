@@ -22,11 +22,17 @@ npm run check      # type-check the project
 src/
   styles/global.css       Colors, fonts, corner radii (the Tailwind theme)
   layouts/BaseLayout.astro  Page shell: <head>, header, footer
-  components/             Header, footer, cards, featured story, Tell Your Story band
-  pages/                  One file per page; stories/[slug].astro makes a page per story
-  lib/content.ts          Every page gets its stories and interviews from here
-  lib/types.ts            The shape of a Story and a Voice (interview)
+  components/             Header, footer, cards, story parts, Voices pop-up player, author card
+  pages/                  One file per page
+    stories/[slug].astro    A page per story
+    stories/page/[page].astro  Stories list pages 2, 3, ... (page 1 is stories/index.astro)
+    authors/[slug].astro    A profile page per author
+  lib/content.ts          Every page gets its stories, authors, interviews and About text from here
+  lib/types.ts            The shape of a Story, Author, Voice (interview) and the About page
+  lib/site.ts             Instagram handle, interview hashtag and other site-wide settings
   lib/navigation.ts       Menu links
+  lib/video.ts            Turns YouTube and Instagram links into embedded players
+  lib/format.ts           Date formatting (Detroit time)
   data/placeholders.ts    Stand-in content until Sanity and Instagram are connected
 public/                   Files served as-is (favicon)
 wrangler.jsonc            Cloudflare Workers config
@@ -34,7 +40,8 @@ wrangler.jsonc            Cloudflare Workers config
 
 - To change a brand color or font, edit the `@theme` block in `src/styles/global.css`. Classes like `bg-brand` and `text-sun` update everywhere.
 - Bracketed text such as `[Story headline goes here]` is placeholder content.
-- Story pages, the Stories list, Voices, About and Tell Your Story are basic versions so the menu works. They get fleshed out later.
+- Fill in the Instagram handle and interview hashtag in `src/lib/site.ts`.
+- The Tell Your Story form doesn't send anything yet. Submitting shows a "not connected yet" note until the sending step is built.
 
 ## Deploying to Cloudflare
 
@@ -53,3 +60,9 @@ wrangler.jsonc            Cloudflare Workers config
 3. Tell Your Story form: a server endpoint that emails submissions, with Cloudflare Turnstile against spam.
 4. Voices of Detroit from Instagram: fetch tagged videos at build time, rebuild on a schedule, refresh the access token every 60 days.
 5. Launch: custom domain, share previews, analytics.
+
+## Copyright
+
+© 2026 The Detroit Story. All rights reserved.
+
+No license is granted to copy, modify or distribute this code. The Detroit Story name and branding, and all stories, photos and videos, belong to The Detroit Story.

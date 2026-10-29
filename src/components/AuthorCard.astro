@@ -1,0 +1,31 @@
+---
+/** Compact author summary with a link to their profile, used on the About page. */
+import type { Author } from '../lib/types';
+import { authorUrl } from '../lib/content';
+import AuthorPhoto from './AuthorPhoto.astro';
+
+interface Props {
+  author: Author;
+}
+
+const { author } = Astro.props;
+---
+
+<!-- Lays out by the card's own width (container query), so it fits a sidebar or a full-width row. -->
+<div class="@container rounded-feature bg-white p-6 text-ink">
+  <div class="flex flex-col gap-5 @md:flex-row @md:items-start">
+    <AuthorPhoto author={author} class="size-24" />
+    <div class="min-w-0">
+      <h3 class="font-display text-[22px] leading-7 font-extrabold">{author.name}</h3>
+      {author.role && <p class="mt-0.5 font-semibold text-muted">{author.role}</p>}
+      {author.bio && <p class="mt-3 text-base leading-7">{author.bio}</p>}
+      <a
+        href={authorUrl(author)}
+        class="mt-2 inline-flex min-h-11 items-center gap-1.5 font-bold text-brand hover:underline"
+      >
+        Read their stories<span class="sr-only"> by {author.name}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>

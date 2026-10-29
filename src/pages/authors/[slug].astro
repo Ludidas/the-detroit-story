@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { Author } from '../../lib/types';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorPhoto from '../../components/AuthorPhoto.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { getAuthors, getStoriesByAuthor } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const authors = await getAuthors();
+  return authors.map((author) => ({ params: { slug: author.slug }, props: { author } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  author: Author;
+}
+
+const { author } = Astro.props;
+const stories = await getStoriesByAuthor(author.slug);
+const tones = ['blue', 'sun', 'gray'] as const;
+---
+
+<BaseLayout title={author.name} description={author.bio}>
+  <section class="mx-auto max-w-site px-5 pt-10 pb-12 sm:px-8 lg:pt-14 lg:pb-16">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-10">
+      <AuthorPhoto author={author} class="size-36 sm:size-44" />
+      <div class="max-w-[680px]">
+        <p class="text-[13px] leading-[18px] font-bold tracking-[0.12em] text-brand uppercase">Author</p>
+        <h1
+          class="mt-2 font-display text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.05] font-extrabold tracking-[-0.02em]"
+        >
+          {author.name}
+        </h1>
+        {author.role && <p class="mt-1 text-lg font-semibold text-muted">{author.role}</p>}
+        {author.bio && <p class="mt-4 text-lg leading-8">{author.bio}</p>}
+        {
+          author.links && author.links.length > 0 && (
+            <ul class="mt-5 flex flex-wrap gap-3">
+              {author.links.map((link) => (
+                <li>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex h-11 items-center rounded-full border-2 border-ink px-5 font-semibold transition-colors hover:bg-ink hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    stories.length > 0 && (
+      <section aria-labelledby="author-stories" class="mx-auto max-w-site px-5 pb-12 sm:px-8 lg:pb-16">
+        <SectionHeading id="author-stories" title={`Stories by ${author.name}`} />
+        <div class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {stories.map((story, i) => (
+            <StoryCard story={story} tone={tones[i % tones.length]} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

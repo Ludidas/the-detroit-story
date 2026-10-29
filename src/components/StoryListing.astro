@@ -1,0 +1,54 @@
+---
+/** The Stories list for one page, with Newer / Older links when there's more than one page. */
+import type { Story } from '../lib/types';
+import { storiesPageUrl } from '../lib/content';
+import SectionHeading from './SectionHeading.astro';
+import StoryCard from './StoryCard.astro';
+
+interface Props {
+  stories: Story[];
+  page: number;
+  totalPages: number;
+}
+
+const { stories, page, totalPages } = Astro.props;
+const tones = ['blue', 'sun', 'gray'] as const;
+const pillLink =
+  'inline-flex h-12 items-center gap-1.5 rounded-full border-2 border-ink px-5 font-semibold transition-colors hover:bg-ink hover:text-white';
+---
+
+<section class="mx-auto max-w-site px-5 pt-10 pb-12 sm:px-8 lg:pt-14 lg:pb-16">
+  <SectionHeading
+    level="h1"
+    title="Stories"
+    subtitle={totalPages > 1 ? `Page ${page} of ${totalPages}` : 'The people, experiences, and issues that make Detroit what it is.'}
+  />
+
+  <div class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    {stories.map((story, i) => <StoryCard story={story} tone={tones[i % tones.length]} headingLevel="h2" />)}
+  </div>
+
+  {
+    totalPages > 1 && (
+      <nav aria-label="More stories" class="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-ink pt-6">
+        {page > 1 ? (
+          <a href={storiesPageUrl(page - 1)} class={pillLink}>
+            <span aria-hidden="true">←</span> Newer stories
+          </a>
+        ) : (
+          <span />
+        )}
+        <span class="text-[15px] font-semibold text-muted">
+          Page {page} of {totalPages}
+        </span>
+        {page < totalPages ? (
+          <a href={storiesPageUrl(page + 1)} class={pillLink}>
+            Older stories <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <span />
+        )}
+      </nav>
+    )
+  }
+</section>

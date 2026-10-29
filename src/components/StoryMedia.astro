@@ -1,0 +1,68 @@
+---
+/**
+  The main photo or video at the top of a story, with its caption and credit.
+  - YouTube link: plays right on the page.
+  - Other video link (e.g. Instagram): thumbnail with a play button that opens the video.
+  - No video: the main photo, or a placeholder until one is added.
+*/
+import type { Story } from '../lib/types';
+import { youtubeEmbedUrl } from '../lib/video';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+import PlayButton from './PlayButton.astro';
+
+interface Props {
+  story: Story;
+}
+
+const { story } = Astro.props;
+const embedUrl = story.videoUrl ? youtubeEmbedUrl(story.videoUrl) : undefined;
+const linkedVideo = story.videoUrl && !embedUrl ? story.videoUrl : undefined;
+const creditLabel = story.videoUrl ? 'Video' : 'Photo';
+const frame = 'aspect-3/2 w-full rounded-feature lg:aspect-video';
+---
+
+<figure class="mx-auto mt-8 max-w-[1104px] px-5 sm:px-8 lg:mt-10">
+  {
+    embedUrl ? (
+      <div class="aspect-video overflow-hidden rounded-feature bg-ink">
+        <iframe
+          src={embedUrl}
+          title={`Video: ${story.title}`}
+          loading="lazy"
+          class="size-full"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        />
+      </div>
+    ) : linkedVideo ? (
+      <a href={linkedVideo} target="_blank" rel="noopener" class="relative block">
+        {story.image ? (
+          <img src={story.image.src} alt="" class:list={[frame, 'object-cover']} />
+        ) : (
+          <MediaPlaceholder label="Video thumbnail" tone="feature" class={frame} />
+        )}
+        <span class="absolute inset-0 grid place-items-center">
+          <PlayButton size="lg" tone="sun" />
+        </span>
+        <span class="sr-only">Watch the video (opens in a new tab)</span>
+      </a>
+    ) : story.image ? (
+      <img src={story.image.src} alt={story.image.alt} class:list={[frame, 'object-cover']} />
+    ) : (
+      <MediaPlaceholder label="Story photo or video" tone="feature" class={frame} />
+    )
+  }
+  {
+    (story.caption || story.credit) && (
+      <figcaption class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm leading-5 text-muted">
+        {story.caption && <span>{story.caption}</span>}
+        {story.credit && (
+          <span class="font-semibold">
+            {creditLabel}: {story.credit}
+          </span>
+        )}
+      </figcaption>
+    )
+  }
+</figure>

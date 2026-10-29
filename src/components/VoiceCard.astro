@@ -1,5 +1,6 @@
 ---
 import type { Voice } from '../lib/types';
+import { instagramEmbedUrl } from '../lib/video';
 import MediaPlaceholder from './MediaPlaceholder.astro';
 import PlayButton from './PlayButton.astro';
 
@@ -11,10 +12,18 @@ const { voice } = Astro.props;
 const isExternal = voice.permalink.startsWith('http');
 ---
 
+<!--
+  A plain link to the Instagram post. On pages that include <VoicePlayer />,
+  a click opens the interview in a pop-up instead (data-voice-player).
+-->
 <a
   href={voice.permalink}
   target={isExternal ? '_blank' : undefined}
   rel={isExternal ? 'noopener' : undefined}
+  data-voice-player
+  data-embed-src={instagramEmbedUrl(voice.permalink) ?? ''}
+  data-voice-title={voice.title}
+  data-voice-person={voice.person ?? ''}
   class="group block text-ink"
 >
   <div class="relative aspect-4/5 overflow-hidden rounded-card">
@@ -37,5 +46,4 @@ const isExternal = voice.permalink.startsWith('http');
     {voice.title}
   </p>
   {voice.person && <p class="mt-1.5 text-sm leading-5 text-muted-sun">{voice.person}</p>}
-  {isExternal && <span class="sr-only">(opens Instagram in a new tab)</span>}
 </a>
