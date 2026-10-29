@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+---
+
+<BaseLayout title="Page not found">
+  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+    <SectionHeading level="h1" title="Page not found" />
+    <p class="max-w-[640px] text-lg leading-8">That page doesn’t exist, or it has moved.</p>
+    <a href="/" class="mt-6 inline-flex h-12 items-center rounded-full bg-ink px-6 font-semibold text-white hover:bg-brand">
+      Back to the home page
+    </a>
+  </section>
+</BaseLayout>

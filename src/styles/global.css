@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/*
+  Design tokens from mockup D (Broadsheet layout, Block Party style).
+  Each token becomes a Tailwind class: --color-brand -> bg-brand / text-brand,
+  --font-display -> font-display, --radius-card -> rounded-card, and so on.
+*/
+@theme {
+  --font-display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Instrument Sans Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --color-brand: #1d3fd0;        /* masthead, Tell Your Story band, links */
+  --color-sun: #ffd034;          /* "Story" in the wordmark, tagline, Voices section */
+  --color-ink: #15161a;          /* body text, dark buttons, footer */
+  --color-muted: #454852;        /* secondary text on white */
+  --color-muted-sun: #3a3320;    /* secondary text on yellow */
+  --color-muted-ink: #b9bbc4;    /* secondary text on the dark footer */
+  --color-rule-ink: #3a3c45;     /* divider lines on the dark footer */
+
+  --radius-card: 1rem;
+  --radius-feature: 1.25rem;
+
+  --container-site: 75rem;       /* 1200px content width */
+}
+
+@layer base {
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+/*
+  Striped stand-ins for photos and video thumbnails until real images exist.
+  Each one sets the background and a readable label color.
+*/
+@utility hatch-blue {
+  background: repeating-linear-gradient(135deg, #dce2fa 0 14px, #d3daf8 14px 28px);
+  color: #2b3350;
+}
+@utility hatch-sun {
+  background: repeating-linear-gradient(135deg, #ffe9a3 0 14px, #ffe391 14px 28px);
+  color: #4a3a00;
+}
+@utility hatch-gray {
+  background: repeating-linear-gradient(135deg, #e4e5ea 0 14px, #dbdce2 14px 28px);
+  color: #33363f;
+}
+@utility hatch-cream {
+  background: repeating-linear-gradient(135deg, #ffffff 0 14px, #fff6d6 14px 28px);
+  color: #3a3320;
+}
+@utility hatch-feature {
+  background: repeating-linear-gradient(135deg, #cbd3f6 0 16px, #c2cbf3 16px 32px);
+  color: #2b3350;
+}

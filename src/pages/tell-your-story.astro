@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+
+// Basic version for now; the submission form is built in step 6.
+const ways = [
+  'Tell us about yourself',
+  'Suggest someone we should interview',
+  'Suggest a story or topic',
+  'Leave your contact information so we can follow up',
+];
+---
+
+<BaseLayout title="Tell Your Story">
+  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+    <SectionHeading level="h1" title="Tell Your Story" />
+    <div class="max-w-[720px] text-lg leading-8">
+      <p>Here’s how you can share your story or point us to someone else’s:</p>
+      <ul class="mt-4 list-disc space-y-1 pl-6">
+        {ways.map((way) => <li>{way}</li>)}
+      </ul>
+      <p class="mt-8 rounded-card border-2 border-dashed border-muted p-6 text-muted">[Submission form goes here.]</p>
+    </div>
+  </section>
+</BaseLayout>

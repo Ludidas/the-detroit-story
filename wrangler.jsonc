@@ -1,0 +1,11 @@
+// Cloudflare Workers config. For now the Worker only serves the built static site
+// from ./dist; the form handler and scheduled Instagram jobs get added here later.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "the-detroit-story",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

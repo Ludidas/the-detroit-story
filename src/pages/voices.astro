@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import VoiceCard from '../components/VoiceCard.astro';
+import { getVoices } from '../lib/content';
+
+// Basic version for now; in step 7 this fills from the tagged Instagram posts.
+const voices = await getVoices();
+---
+
+<BaseLayout title="Voices of Detroit" description="Street interviews from around Detroit.">
+  <section class="bg-sun">
+    <div class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+      <SectionHeading level="h1" title="Voices of Detroit" subtitle="Street interviews from around the city." />
+      <div class="grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-4 lg:gap-6">
+        {voices.map((voice) => <VoiceCard voice={voice} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { getStories } from '../../lib/content';
+
+// Basic version for now; the full Stories page is built in step 4.
+const stories = await getStories();
+const tones = ['blue', 'sun', 'gray'] as const;
+---
+
+<BaseLayout title="Stories">
+  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+    <SectionHeading level="h1" title="Stories" />
+    <div class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {stories.map((story, i) => <StoryCard story={story} tone={tones[i % tones.length]} headingLevel="h2" />)}
+    </div>
+  </section>
+</BaseLayout>

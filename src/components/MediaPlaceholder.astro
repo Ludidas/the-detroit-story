@@ -1,0 +1,33 @@
+---
+/**
+  Striped stand-in for a photo or video thumbnail until real images exist.
+  Size and shape come from the class passed in (e.g. "aspect-3/2 rounded-card").
+  Anything in the slot (like a play button) is centered on top.
+*/
+interface Props {
+  label?: string;
+  tone?: 'blue' | 'sun' | 'gray' | 'cream' | 'feature';
+  class?: string;
+}
+
+const { label, tone = 'blue', class: className } = Astro.props;
+
+const tones = {
+  blue: 'hatch-blue',
+  sun: 'hatch-sun',
+  gray: 'hatch-gray',
+  cream: 'hatch-cream',
+  feature: 'hatch-feature',
+};
+---
+
+<div aria-hidden="true" class:list={['relative grid place-items-center overflow-hidden', tones[tone], className]}>
+  <slot />
+  {
+    label && (
+      <span class="absolute bottom-3 left-4 text-[11px] leading-4 font-bold tracking-[0.08em] uppercase">
+        {label}
+      </span>
+    )
+  }
+</div>

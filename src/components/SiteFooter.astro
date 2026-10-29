@@ -1,0 +1,31 @@
+---
+import { mainNav, tellYourStory } from '../lib/navigation';
+
+const links = [...mainNav, tellYourStory];
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-white">
+  <div class="mx-auto max-w-site px-5 pt-10 pb-12 sm:px-8">
+    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+      <p class="font-display text-[26px] leading-9 font-extrabold tracking-[-0.01em] uppercase">
+        The Detroit <span class="text-sun">Story</span>
+      </p>
+      <nav aria-label="Footer" class="flex flex-wrap gap-x-6">
+        {
+          links.map(({ href, label }) => (
+            <a href={href} class="inline-block py-3 text-sm leading-5 text-white hover:text-sun focus-visible:outline-sun">
+              {label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+    <div
+      class="mt-4 flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-rule-ink pt-4 text-sm leading-5 text-muted-ink"
+    >
+      <p>© {year} The Detroit Story · Detroit, Michigan</p>
+      <p>Follow along: [YOUR SOCIAL LINKS]</p>
+    </div>
+  </div>
+</footer>

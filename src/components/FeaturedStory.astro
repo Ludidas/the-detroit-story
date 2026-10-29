@@ -1,0 +1,67 @@
+---
+import type { Story } from '../lib/types';
+import { storyUrl } from '../lib/content';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+import PlayButton from './PlayButton.astro';
+
+interface Props {
+  story: Story;
+}
+
+const { story } = Astro.props;
+const href = storyUrl(story);
+const isVideo = Boolean(story.videoUrl);
+---
+
+<section aria-labelledby="featured-heading" class="mx-auto max-w-site px-5 sm:px-8">
+  <div class="border-t border-ink pt-10 pb-14">
+    <p class="text-[13px] leading-[18px] font-bold tracking-[0.12em] text-brand uppercase">Featured story</p>
+    <div class="mt-4 grid items-center gap-8 lg:grid-cols-[1.9fr_1fr] lg:gap-10">
+      <a href={href} tabindex="-1" aria-hidden="true" class="relative block">
+        {
+          story.image ? (
+            <>
+              <img
+                src={story.image.src}
+                alt=""
+                decoding="async"
+                class="aspect-video w-full rounded-feature object-cover"
+              />
+              {isVideo && (
+                <span class="absolute inset-0 grid place-items-center">
+                  <PlayButton size="lg" tone="sun" />
+                </span>
+              )}
+            </>
+          ) : (
+            <MediaPlaceholder label="Featured photo or video · 16:9" tone="feature" class="aspect-video rounded-feature">
+              {isVideo && <PlayButton size="lg" tone="sun" />}
+            </MediaPlaceholder>
+          )
+        }
+      </a>
+      <div>
+        <h2
+          id="featured-heading"
+          class="font-display text-[clamp(1.875rem,3.3vw,2.75rem)] leading-[1.08] font-extrabold tracking-[-0.015em] text-balance"
+        >
+          <a href={href} class="decoration-2 underline-offset-4 hover:underline">{story.title}</a>
+        </h2>
+        <p class="mt-4 text-lg leading-7 text-muted">{story.excerpt}</p>
+        <a
+          href={href}
+          class="mt-6 inline-flex h-12 items-center gap-2.5 rounded-full bg-ink px-[22px] text-[15px] font-semibold text-white transition-colors hover:bg-brand"
+        >
+          {
+            isVideo && (
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )
+          }
+          {isVideo ? 'Watch the story' : 'Read the story'}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

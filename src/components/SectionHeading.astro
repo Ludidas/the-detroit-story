@@ -1,0 +1,33 @@
+---
+/** Thick rule, big heading, and an optional "see all" link, as in the mockup. */
+interface Props {
+  title: string;
+  id?: string;
+  level?: 'h1' | 'h2';
+  subtitle?: string;
+  link?: { href: string; label: string };
+}
+
+const { title, id, level = 'h2', subtitle, link } = Astro.props;
+const Heading = level;
+---
+
+<div class="mb-7 flex flex-wrap items-end justify-between gap-x-6 border-t-[3px] border-ink pt-4">
+  <div>
+    <Heading
+      id={id}
+      class="font-display text-[clamp(2.25rem,4.2vw,3.5rem)] leading-[1.07] font-extrabold tracking-[-0.02em]"
+    >
+      {title}
+    </Heading>
+    {subtitle && <p class="mt-2 text-lg leading-7 font-medium">{subtitle}</p>}
+  </div>
+  {
+    link && (
+      <a href={link.href} class="inline-flex min-h-11 items-center gap-1.5 text-[15px] font-bold text-ink hover:underline">
+        {link.label}
+        <span aria-hidden="true">→</span>
+      </a>
+    )
+  }
+</div>

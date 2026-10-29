@@ -1,0 +1,41 @@
+---
+import type { Voice } from '../lib/types';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+import PlayButton from './PlayButton.astro';
+
+interface Props {
+  voice: Voice;
+}
+
+const { voice } = Astro.props;
+const isExternal = voice.permalink.startsWith('http');
+---
+
+<a
+  href={voice.permalink}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener' : undefined}
+  class="group block text-ink"
+>
+  <div class="relative aspect-4/5 overflow-hidden rounded-card">
+    {
+      voice.thumbnailUrl ? (
+        <>
+          <img src={voice.thumbnailUrl} alt="" loading="lazy" decoding="async" class="size-full object-cover" />
+          <span class="absolute inset-0 grid place-items-center">
+            <PlayButton />
+          </span>
+        </>
+      ) : (
+        <MediaPlaceholder tone="cream" class="size-full">
+          <PlayButton />
+        </MediaPlaceholder>
+      )
+    }
+  </div>
+  <p class="mt-3 text-[clamp(1rem,1.35vw,1.125rem)] leading-[1.35] font-bold decoration-2 underline-offset-4 group-hover:underline">
+    {voice.title}
+  </p>
+  {voice.person && <p class="mt-1.5 text-sm leading-5 text-muted-sun">{voice.person}</p>}
+  {isExternal && <span class="sr-only">(opens Instagram in a new tab)</span>}
+</a>

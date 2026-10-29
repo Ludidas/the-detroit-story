@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+.wrangler/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment variables (secrets such as API tokens live here, never in git)
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FeaturedStory from '../components/FeaturedStory.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import StoryCard from '../components/StoryCard.astro';
+import VoiceCard from '../components/VoiceCard.astro';
+import TellYourStoryBand from '../components/TellYourStoryBand.astro';
+import { getFeaturedStory, getLatestStories, getVoices } from '../lib/content';
+
+const featured = await getFeaturedStory();
+const latest = await getLatestStories(6);
+const voices = await getVoices(4);
+const tones = ['blue', 'sun', 'gray'] as const;
+---
+
+<BaseLayout>
+  <section aria-label="About The Detroit Story" class="mx-auto max-w-site px-5 py-8 sm:px-8 lg:py-12">
+    <p
+      class="mx-auto max-w-[780px] text-center font-display text-[clamp(1.25rem,2.1vw,1.75rem)] leading-[1.35] font-semibold tracking-[-0.01em] text-balance"
+    >
+      The Detroit Story is a community storytelling project focused on the people, experiences, and issues that make
+      Detroit what it is.
+    </p>
+  </section>
+
+  {featured && <FeaturedStory story={featured} />}
+
+  <section aria-labelledby="latest-heading" class="mx-auto max-w-site px-5 pt-2 pb-12 sm:px-8 lg:pb-16">
+    <SectionHeading id="latest-heading" title="Latest Stories" link={{ href: '/stories', label: 'All stories' }} />
+    <div class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {latest.map((story, i) => <StoryCard story={story} tone={tones[i % tones.length]} />)}
+    </div>
+  </section>
+
+  <section aria-labelledby="voices-heading" class="bg-sun">
+    <div class="mx-auto max-w-site px-5 pt-12 pb-14 sm:px-8 lg:pt-16 lg:pb-[72px]">
+      <SectionHeading
+        id="voices-heading"
+        title="Voices of Detroit"
+        subtitle="Street interviews from around the city."
+        link={{ href: '/voices', label: 'All interviews' }}
+      />
+      <div class="grid grid-cols-2 gap-x-5 gap-y-7 lg:grid-cols-4 lg:gap-6">
+        {voices.map((voice) => <VoiceCard voice={voice} />)}
+      </div>
+    </div>
+  </section>
+
+  <TellYourStoryBand />
+</BaseLayout>

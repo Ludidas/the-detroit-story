@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+
+// Basic version for now; in step 5 the About text is edited in Sanity.
+---
+
+<BaseLayout title="About">
+  <section class="mx-auto max-w-site px-5 py-10 sm:px-8 lg:py-14">
+    <SectionHeading level="h1" title="About" />
+    <div class="max-w-[720px] space-y-5 text-lg leading-8">
+      <p class="font-display text-[clamp(1.25rem,2.1vw,1.625rem)] leading-[1.35] font-semibold">
+        The Detroit Story is a community storytelling project focused on the people, experiences, and issues that make
+        Detroit what it is.
+      </p>
+      <p>[A few paragraphs on what The Detroit Story is and why it exists.]</p>
+    </div>
+  </section>
+</BaseLayout>

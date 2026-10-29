@@ -1,0 +1,46 @@
+---
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/instrument-sans';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  /** Page name, shown before the site name in the browser tab. Leave out on the home page. */
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Real People. Real Stories. Real Detroit. A community storytelling project focused on the people, experiences, and issues that make Detroit what it is.',
+} = Astro.props;
+
+const isHome = Astro.url.pathname === '/';
+const pageTitle = title ? `${title} | The Detroit Story` : 'The Detroit Story';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="bg-white font-sans text-base leading-normal text-ink antialiased">
+    <a
+      href="#main"
+      class="sr-only rounded-full bg-sun px-5 py-3 font-bold text-ink focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-10"
+    >
+      Skip to content
+    </a>
+    <SiteHeader isHome={isHome} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

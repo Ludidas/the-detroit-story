@@ -1,0 +1,23 @@
+---
+/** Round play badge drawn over video thumbnails. Decorative: the surrounding link carries the label. */
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  tone?: 'ink' | 'sun';
+}
+
+const { size = 'md', tone = 'ink' } = Astro.props;
+
+const sizes = {
+  sm: 'size-12 [&>svg]:size-[18px]',
+  md: 'size-14 [&>svg]:size-[22px]',
+  lg: 'size-[76px] [&>svg]:size-7',
+};
+const tones = {
+  ink: 'bg-ink text-white',
+  sun: 'bg-sun text-ink',
+};
+---
+
+<span aria-hidden="true" class:list={['grid place-items-center rounded-full', sizes[size], tones[tone]]}>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+</span>

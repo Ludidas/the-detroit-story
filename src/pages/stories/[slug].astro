@@ -1,0 +1,44 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { Story } from '../../lib/types';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MediaPlaceholder from '../../components/MediaPlaceholder.astro';
+import { getStories } from '../../lib/content';
+
+// Basic story page for now; the full design is built in step 4 and the body text comes from Sanity in step 5.
+export const getStaticPaths = (async () => {
+  const stories = await getStories();
+  return stories.map((story) => ({ params: { slug: story.slug }, props: { story } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  story: Story;
+}
+
+const { story } = Astro.props;
+---
+
+<BaseLayout title={story.title} description={story.excerpt}>
+  <article class="mx-auto max-w-[760px] px-5 py-10 sm:px-8 lg:py-14">
+    <p class="text-[13px] leading-[18px] font-bold tracking-[0.12em] text-brand uppercase">Story</p>
+    <h1
+      class="mt-3 font-display text-[clamp(2rem,4.2vw,3.25rem)] leading-[1.07] font-extrabold tracking-[-0.02em] text-balance"
+    >
+      {story.title}
+    </h1>
+    <p class="mt-4 text-xl leading-8 text-muted">{story.excerpt}</p>
+    {
+      story.image ? (
+        <img src={story.image.src} alt={story.image.alt} class="mt-8 aspect-3/2 w-full rounded-feature object-cover" />
+      ) : (
+        <MediaPlaceholder label="Story photo or video" tone="feature" class="mt-8 aspect-3/2 rounded-feature" />
+      )
+    }
+    <div class="mt-8 text-lg leading-8">
+      <p>[The full story goes here.]</p>
+    </div>
+    <a href="/stories" class="mt-10 inline-flex min-h-11 items-center gap-1.5 font-bold text-brand hover:underline">
+      <span aria-hidden="true">←</span> All stories
+    </a>
+  </article>
+</BaseLayout>

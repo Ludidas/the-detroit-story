@@ -1,0 +1,43 @@
+---
+import type { Story } from '../lib/types';
+import { storyUrl } from '../lib/content';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
+interface Props {
+  story: Story;
+  /** Stripe color for the placeholder when the story has no photo yet. */
+  tone?: 'blue' | 'sun' | 'gray';
+  /** h3 under a section heading (home page), h2 on a page whose h1 is "Stories". */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { story, tone = 'blue', headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+const href = storyUrl(story);
+---
+
+<article class="flex flex-col">
+  <a href={href} tabindex="-1" aria-hidden="true" class="block">
+    {
+      story.image ? (
+        <img
+          src={story.image.src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="aspect-3/2 w-full rounded-card object-cover"
+        />
+      ) : (
+        <MediaPlaceholder label="Photo" tone={tone} class="aspect-3/2 rounded-card" />
+      )
+    }
+  </a>
+  <Heading class="mt-4 font-display text-[22px] leading-7 font-bold">
+    <a href={href} class="decoration-2 underline-offset-4 hover:underline">{story.title}</a>
+  </Heading>
+  <p class="mt-2 text-[15px] leading-[23px] text-muted">{story.excerpt}</p>
+  <a href={href} class="mt-1 inline-flex min-h-11 items-center gap-1.5 self-start text-[15px] font-bold text-brand hover:underline">
+    Read more<span class="sr-only">: {story.title}</span>
+    <span aria-hidden="true">→</span>
+  </a>
+</article>

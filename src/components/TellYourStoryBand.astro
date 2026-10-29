@@ -1,0 +1,24 @@
+---
+import { tellYourStory } from '../lib/navigation';
+---
+
+<section aria-labelledby="tell-heading" class="bg-brand text-white">
+  <div class="mx-auto max-w-site px-5 py-12 text-center sm:px-8 lg:py-[72px]">
+    <h2
+      id="tell-heading"
+      class="font-display text-[clamp(2.25rem,4.2vw,3.5rem)] leading-[1.07] font-extrabold tracking-[-0.02em]"
+    >
+      Tell Your Story
+    </h2>
+    <p class="mx-auto mt-4 max-w-[640px] text-lg leading-7">
+      Tell us about yourself, suggest someone we should interview, or pitch a story or topic. Leave your contact
+      information so we can follow up.
+    </p>
+    <a
+      href={tellYourStory.href}
+      class="mt-7 inline-flex h-[52px] items-center rounded-full bg-sun px-7 text-base font-bold text-ink transition-colors hover:bg-white focus-visible:outline-white"
+    >
+      Share your story
+    </a>
+  </div>
+</section>
